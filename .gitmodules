@@ -1,0 +1,3 @@
+[submodule "examples/espidf-arduino-blink/components/esp32-camera"]
+	path = examples/espidf-arduino-blink/components/esp32-camera
+	url = https://github.com/JojoS62/esp32-camera.git
