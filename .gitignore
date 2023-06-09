@@ -1,1 +1,4 @@
 *.pyc
+examples/espidf-arduino-blink/dependencies.lock
+examples/espidf-arduino-blink/sdkconfig.esp32cam
+examples/espidf-arduino-blink/.vscode
