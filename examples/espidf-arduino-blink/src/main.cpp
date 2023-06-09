@@ -18,6 +18,9 @@ void setup() {
   
   Serial.println("setup done");
   //camera_config_jpg();
+
+  bool hasPSRam = psramFound();
+  printf("has PSRam %d\n", hasPSRam);
 }
 
 void Take_Pictures(){                                                           // Aktualisieren Winsocks Clients
