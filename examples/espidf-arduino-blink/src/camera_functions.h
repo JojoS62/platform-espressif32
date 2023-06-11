@@ -25,10 +25,9 @@ void camera_config_gray(){
     config.pixel_format = PIXFORMAT_GRAYSCALE;                                                    // Graustufen Bild
     config.frame_size   = FRAMESIZE_CIF;                                                        // Auflösung 96x96 Pixel
     config.jpeg_quality = 12;                                                                     // Qualität 
-    config.fb_count     = 1;                                                                      // Anzahl Framerbuffer
-    config.fb_location = CAMERA_FB_IN_PSRAM;
-    config.fb_location = CAMERA_FB_IN_DRAM;
-    // config.grab_mode = CAMERA_GRAB_WHEN_EMPTY;
+    config.fb_count     = 2;                                                                      // Anzahl Framerbuffer
+    config.fb_location  = CAMERA_FB_IN_PSRAM;
+    config.grab_mode    = CAMERA_GRAB_WHEN_EMPTY;
        
     esp_err_t err = esp_camera_init(&config);                                                      // camera init
     if (err != ESP_OK) {
@@ -66,12 +65,11 @@ void camera_config_jpg(){
     config.pin_reset    = RESET_GPIO_NUM;
     config.xclk_freq_hz = 20000000;
     config.pixel_format = PIXFORMAT_JPEG; 
-    config.frame_size = FRAMESIZE_SVGA;
+    config.frame_size   = FRAMESIZE_UXGA;
     config.jpeg_quality = 12;                                                                     // Qualität 
-    config.fb_count     = 1;                                                                      // Anzahl Framerbuffer
-    config.fb_location = CAMERA_FB_IN_DRAM;
-    // config.fb_location = CAMERA_FB_IN_PSRAM;
-    config.grab_mode = CAMERA_GRAB_WHEN_EMPTY;
+    config.fb_count     = 2;                                                                      // Anzahl Framerbuffer
+    config.fb_location  = CAMERA_FB_IN_PSRAM;
+    config.grab_mode    = CAMERA_GRAB_WHEN_EMPTY;
     esp_err_t err = esp_camera_init(&config);                                                      // camera init
     if (err != ESP_OK) {
         Serial.printf("Camera init failed with error 0x%x", err);
@@ -99,10 +97,10 @@ bool change_Picture_Format_to_JPEG() {
     return 0;
   }
   
-  s->set_pixformat(s,PIXFORMAT_JPEG); 
-  s->set_framesize(s,FRAMESIZE_SVGA);
+  // s->set_pixformat(s,PIXFORMAT_JPEG); 
+  s->set_framesize(s, FRAMESIZE_UXGA);
 
-    esp_camera_change_resolution(&config, FRAMESIZE_SVGA);
+    esp_camera_change_resolution(&config, FRAMESIZE_UXGA);
 
 
   return 1;
@@ -114,7 +112,7 @@ bool change_Picture_Format_to_GRAYSCALE() {
     Serial.println("Error: problem reading camera sensor settings");
     return 0;
   }
-  s->set_pixformat(s,PIXFORMAT_GRAYSCALE); 
+  // s->set_pixformat(s,PIXFORMAT_GRAYSCALE); 
   s->set_framesize(s,FRAMESIZE_CIF);
 
   esp_camera_change_resolution(&config, FRAMESIZE_CIF);

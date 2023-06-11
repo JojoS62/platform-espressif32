@@ -1,7 +1,7 @@
 #include <Arduino.h>
 #include <esp_camera.h>                                                                           // ESP Camera https://github.com/espressif/esp32-camera
 #include "camera_pins.h"                                                                          // Camera Pins OV3660
-#include "camera_config.h"                                                                        // Camera config
+                                                                      // Camera config
 #include "camera_functions.h"                                                                     // Camera Funktionen
 
 unsigned long Timer_Millis;
@@ -25,50 +25,52 @@ void setup() {
 
 void Take_Pictures(){                                                           // Aktualisieren Winsocks Clients
   if ((Timer_Millis + 2000) < millis()){                                                 // Alle ?? mS
-    Serial.print("Start ms ");
-    Serial.println(millis());
+    int framecount = 10;
+    unsigned long start = millis();
 
-    // esp_camera_deinit();
-    // camera_config_jpg();
-    
     change_Picture_Format_to_JPEG();
-    
-    take_Camera_Image_JPG();                                                                       // Bild aufnehmen JPG
-    Serial.print("Jpg Buffer Len ");
-    Serial.println(fb_jpg->len);
-    esp_camera_fb_return(fb_jpg);
-    take_Camera_Image_JPG();                                                                       // Bild aufnehmen JPG
-    Serial.print("Jpg Buffer Len ");
-    Serial.println(fb_jpg->len);
-    esp_camera_fb_return(fb_jpg);
-    take_Camera_Image_JPG();                                                                       // Bild aufnehmen JPG
-    Serial.print("Jpg Buffer Len ");
-    Serial.println(fb_jpg->len);
-    esp_camera_fb_return(fb_jpg);
-    fb_jpg = NULL;
 
-    //esp_camera_deinit();
-    //camera_config_gray();
+    unsigned long stop = millis();
+    unsigned long diff = stop - start;
 
-#if 1
+    printf("change to UXGA took: %ld ms\n", diff);
+
+    start = millis();
+    for (int i = 0; i < framecount; i++) {
+      take_Camera_Image_JPG();                                                                       // Bild aufnehmen JPG
+      Serial.print("Jpg Buffer Len ");
+      Serial.println(fb_jpg->len);
+      esp_camera_fb_return(fb_jpg);
+    }
+
+    stop = millis();
+    diff = (stop - start) / framecount;
+
+    printf("time per frame for %d frames is %ld ms\n", framecount, diff);    
+
+    // 2nd resolution
+    start = millis();
+
     change_Picture_Format_to_GRAYSCALE();
+
+    stop = millis();
+    diff = stop - start;
+
+    printf("change to CIF took: %ld ms\n", diff);
+
     
-    take_Camera_Image_GRAY();
-    Serial.print("Gray Buffer Len ");
-    Serial.println(fb_gray->len);
-    esp_camera_fb_return(fb_gray);
-    take_Camera_Image_GRAY();
-    Serial.print("Gray Buffer Len ");
-    Serial.println(fb_gray->len);
-    esp_camera_fb_return(fb_gray);
-    take_Camera_Image_GRAY();
-    Serial.print("Gray Buffer Len ");
-    Serial.println(fb_gray->len);
-    esp_camera_fb_return(fb_gray);
-    fb_gray = NULL;
-    Serial.print("Ende ms ");
-    Serial.println(millis());
-#endif
+    start = millis();
+    for (int i = 0; i < framecount; i++) {
+      take_Camera_Image_GRAY();
+      Serial.print("Gray Buffer Len ");
+      Serial.println(fb_gray->len);
+      esp_camera_fb_return(fb_gray);
+    }
+
+    stop = millis();
+    diff = (stop - start) / framecount;
+
+    printf("time per frame for %d frames is %ld ms\n", framecount, diff);   
 
     Timer_Millis = millis();                                                            // Zeit merken
   }
